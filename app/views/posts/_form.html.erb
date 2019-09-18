@@ -20,6 +20,10 @@
     <%= f.label :answer %>
     <%= f.text_area :answer %>
   </div>
+<%= f.fields_for :definitions do |e| %>
+      <%= e.label :name %>
+      <%= e.text_field :name %>
+    <% end %>
 
   <div class="actions">
     <%= f.submit %>
