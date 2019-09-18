@@ -1,16 +1,17 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_question
   # GET /answers
   # GET /answers.json
-  def index
-    @answers = Answer.all
-  end
+  # def index
+  #   @answers = Answer.all
+  # end
 
   # GET /answers/1
   # GET /answers/1.json
-  def show
-  end
+  # def show
+  # end
 
   # GET /answers/new
   def new
@@ -25,10 +26,12 @@ class AnswersController < ApplicationController
   # POST /answers.json
   def create
     @answer = Answer.new(answer_params)
+    @answer.user_id = current_user.id
+    @answer.question_id = @question.id
 
     respond_to do |format|
       if @answer.save
-        format.html { redirect_to @answer, notice: 'Answer was successfully created.' }
+        format.html { redirect_to @question, notice: 'Answer was successfully created.' }
         format.json { render :show, status: :created, location: @answer }
       else
         format.html { render :new }
@@ -63,6 +66,10 @@ class AnswersController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+
+    def set_question
+      @question = Question.find(params[:question_id])
+    end
     def set_answer
       @answer = Answer.find(params[:id])
     end

@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  resources :answers
-  resources :questions
+  devise_for :users
+  # resources :answers
+  resources :questions do
+  	resources :answers, except: [:show, :index]
+  end
   resources :examples
   resources :definitions
   resources :posts

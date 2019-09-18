@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :edit, :update, :destroy]
-
   # GET /questions
   # GET /questions.json
   def index
@@ -10,11 +10,12 @@ class QuestionsController < ApplicationController
   # GET /questions/1
   # GET /questions/1.json
   def show
+    @answers = Answer.where(:question_id => @question.id).order("created_at DESC")
   end
 
   # GET /questions/new
   def new
-    @question = Question.new
+    @question = current_user.questions.build
   end
 
   # GET /questions/1/edit
@@ -24,7 +25,7 @@ class QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.json
   def create
-    @question = Question.new(question_params)
+    @question = current_user.questions.build(question_params)
 
     respond_to do |format|
       if @question.save
